@@ -4,16 +4,16 @@
 
 
 <!--
-Element providing solution to no problem in particular.
+Element enabling you to upload files to Google Drive
 
 ##### Example
 
     <google-drive></google-drive>
 
 @element google-drive
-@blurb Element providing solution to no problem in particular.
+@blurb Element enabling you to upload files to Google Drive.
 @status alpha
-@url github.io
+@url http://addyosmani.github.io/google-drive
 -->
 <polymer-element name="google-drive" attributes="autoupload clientId">
 
@@ -31,25 +31,40 @@ Element providing solution to no problem in particular.
   <script>
 
     Polymer({
-            uploadList: [],
+            /**
+             * a Google Developers clientId reference
+             *
+             * @attribute clientId
+             * @type string
+             */
             clientId: '',
+            /**
+             * The queue of files being uploaded
+             *
+             * @attribute uploadList
+             * @type array
+             */
+            uploadList: [],
+            /**
+             * The queue of files that have been uploaded
+             *
+             * @attribute uploadedList
+             * @type array
+             */
             uploadedList: [],
+            /**
+             * Whether files should be automatically uploaded
+             *
+             * @attribute autoUpload
+             * @type boolean
+             */
             autoUpload: true,
             ready: function () {
               this.fire('google-drive-upload-status', { status: 'Ready'});
               document.addEventListener('google-signin-success', function (e) {
                   this.accessToken = e.detail.result.access_token;
-                  //this.$.uploadview.style.display = "block";
               }.bind(this));
-              document.addEventListener('google-signed-out', function (e) {
-                  //this.$.uploadview.style.display = "hidden";
-              }.bind(this));
-              document.addEventListener('google-signed-attempted', function (e) {
-                  //this.$.uploadview.style.display = "hidden";
-              }.bind(this));
-              document.addEventListener('clear-upload-list', function () {
-                  this.clearUploadList();
-              }.bind(this));
+
             },
             selectFiles: function (files) {
                 this.queue = files;
