@@ -1,0 +1,105 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../google-signin/google-signin.html">
+<link rel="import" href="../google-apis/google-apis.html">
+
+
+<!--
+Element providing solution to no problem in particular.
+
+##### Example
+
+    <google-drive></google-drive>
+
+@element google-drive
+@blurb Element providing solution to no problem in particular.
+@status alpha
+@url github.io
+-->
+<polymer-element name="google-drive" attributes="autoupload clientId">
+
+  <template>
+    <script src="upload.js"></script>
+    <link href="google-drive.css" rel="stylesheet" />
+
+    <google-signin clientId="{{clientId}}" scopes="profile"></google-signin>
+
+    <input tabindex="0" type="file" id="files" class="custom-file-input" name="files[]" multiple on-change="{{handleFilePick}}"/>
+
+    <button on-click="{{manualUpload}}" style="display:{{ autoUpload ? 'none' : 'block' }}">Upload files</button>
+  </template>
+
+  <script>
+
+    Polymer({
+            uploadList: [],
+            clientId: '',
+            uploadedList: [],
+            autoUpload: true,
+            ready: function () {
+              this.fire('google-drive-upload-status', { status: 'Ready'});
+              document.addEventListener('google-signin-success', function (e) {
+                  this.accessToken = e.detail.result.access_token;
+                  //this.$.uploadview.style.display = "block";
+              }.bind(this));
+              document.addEventListener('google-signed-out', function (e) {
+                  //this.$.uploadview.style.display = "hidden";
+              }.bind(this));
+              document.addEventListener('google-signed-attempted', function (e) {
+                  //this.$.uploadview.style.display = "hidden";
+              }.bind(this));
+              document.addEventListener('clear-upload-list', function () {
+                  this.clearUploadList();
+              }.bind(this));
+            },
+            selectFiles: function (files) {
+                this.queue = files;
+                this.fire('google-drive-upload-status', { status: 'Files selected'});
+
+                for (var i = 0, f; f = files[i]; i++) {
+                    this.uploadList.push(f);
+                }
+
+                if (this.autoUpload) {
+                    this.uploadFiles(files);
+                }
+            },
+            manualUpload: function () {
+                this.uploadFiles(this.queue);
+            },
+            uploadFiles: function (files) {
+                var uploadedList = this.uploadedList;
+                this.fire('google-drive-upload-files', { files: this.uploadList });
+
+                for (var i = 0, f; f = files[i]; i++) {
+                    this.fire('google-drive-upload-status', { status: 'Uploading'});
+                    var uploader = new MediaUploader({
+                        file: f,
+                        token: this.accessToken,
+                        onComplete: function (data) {
+                            uploadedList.push(JSON.parse(data));
+                            this.fire('google-drive-upload-status', { status: 'Upload successful'});
+                            this.uploadList = [];
+                            this.fire('google-drive-uploaded-files', { files: this.uploadedList });
+                        }.bind(this)
+                    });
+                    uploader.upload();
+                }
+
+            },
+            tapSelect: function (evt) {
+                this.$.files.click();
+            },
+            handleFilePick: function (evt) {
+                evt.stopPropagation();
+                evt.preventDefault();
+                this.selectFiles(evt.target.files);
+            },
+            clearUploadList: function () {
+                this.uploadedList = [];
+                this.uploadList = [];
+            }
+    });
+
+  </script>
+
+</polymer-element>

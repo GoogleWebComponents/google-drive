@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+
+  <title>google-drive Demo</title>
+
+  <script src="../platform/platform.js"></script>
+  <link rel="import" href="google-drive.html">
+
+</head>
+<body unresolved>
+
+  <p>An `google-drive` looks like this:</p>
+
+  <google-drive clientId="400542164111-q94vcbin3jp3fb2a0su1nm6gt4qpf86t.apps.googleusercontent.com"></google-drive>
+
+  <p>Demo content:</p>
+
+	<template id="status" bind="{{status}}">
+		 <strong>Status</strong>: {{message}}
+	</template>
+
+    <ul>
+        <strong>Queue</strong>
+        <template id="queue" repeat="{{uploadList}}">
+            <li><strong>{{name}}</strong> ({{type}})</li>
+        </template>
+    </ul>
+
+    <ul>
+        <strong>Uploaded</strong>
+        <template id="uploaded" repeat="{{uploadedList}}">
+            <li><img src="{{iconLink}}"/> <strong>{{title}}</strong> <a href="{{selfLink}}">Link to
+                file</a>, <a href="{{webContentLink}}">Link to web content</a>, <a
+                    href="{{thumbnailLink}}">Thumbnail</a></li>
+        </template>
+    </ul>
+
+  <script>
+  document.addEventListener('google-drive-upload-files', function(e){
+  	var t = document.querySelector("#queue");
+  	t.model = {};
+  	t.model.uploadList = e.detail.files;
+  });
+
+  document.addEventListener('google-drive-uploaded-files', function(e){
+  	var t = document.querySelector("#uploaded");
+  	t.model = {};
+  	t.model.uploadedList = e.detail.files;
+  });
+
+  document.addEventListener('google-drive-upload-status', function(e){
+  	var t = document.querySelector("#status");
+  	t.model = {};
+  	t.model.status = { message: e.detail.status };
+  });
+  </script>
+
+</body>
+</html>
