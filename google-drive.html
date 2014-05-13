@@ -32,6 +32,30 @@ Element enabling you to upload files to Google Drive
 
     Polymer({
             /**
+             * Fired when the upload status changes
+             * 
+             * @event google-drive-upload-status
+             */
+
+            /**
+             * Fired when the element attempts to upload files
+             * 
+             * @event google-drive-upload-files
+             */
+
+            /**
+             * Fired when file uploads have successfully completed
+             * 
+             * @event google-drive-upload-files
+             */
+
+            /**
+             * Fired when file uploads have failed
+             * 
+             * @event google-drive-upload-failed
+             */
+                                          
+            /**
              * a Google Developers clientId reference
              *
              * @attribute clientId
@@ -84,17 +108,20 @@ Element enabling you to upload files to Google Drive
             uploadFiles: function (files) {
                 var uploadedList = this.uploadedList;
                 this.fire('google-drive-upload-files', { files: this.uploadList });
+                this.fire('google-drive-upload-status', { status: 'Uploading' });
 
                 for (var i = 0, f; f = files[i]; i++) {
-                    this.fire('google-drive-upload-status', { status: 'Uploading' });
                     var uploader = new MediaUploader({
                         file: f,
                         token: this.accessToken,
+                        onError: function (data) {
+                          this.fire('google-drive-upload-failed', { data: data })
+                        },
                         onComplete: function (data) {
                             uploadedList.push(JSON.parse(data));
                             this.fire('google-drive-upload-status', { status: 'Upload successful' });
                             this.uploadList = [];
-                            this.fire('google-drive-uploaded-files', { files: this.uploadedList });
+                            this.fire('google-drive-uploaded-files', { files: this.uploadedList, data: data });
                         }.bind(this)
                     });
                     uploader.upload();
