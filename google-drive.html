@@ -15,7 +15,7 @@ Element enabling you to upload files to Google Drive
 @status alpha
 @url http://addyosmani.github.io/google-drive
 -->
-<polymer-element name="google-drive" attributes="autoupload clientId">
+<polymer-element name="google-drive" attributes="autoUpload clientId">
 
   <template>
     <script src="upload.js"></script>
@@ -25,7 +25,7 @@ Element enabling you to upload files to Google Drive
 
     <input tabindex="0" type="file" id="files" class="custom-file-input" name="files[]" multiple on-change="{{handleFilePick}}"/>
 
-    <button on-click="{{manualUpload}}" style="display:{{ autoUpload ? 'none' : 'block' }}">Upload files</button>
+    <button on-click="{{manualUpload}}" id="upload" style="display:{{ autoUpload ? 'none' : 'block' }}">Upload files</button>
   </template>
 
   <script>
@@ -37,6 +37,12 @@ Element enabling you to upload files to Google Drive
              * @event google-drive-upload-status
              */
 
+            /**
+             * Fired when files have been selected
+             * 
+             * @event google-drive-files-selected
+             */
+            
             /**
              * Fired when the element attempts to upload files
              * 
@@ -56,7 +62,7 @@ Element enabling you to upload files to Google Drive
              */
                                           
             /**
-             * a Google Developers clientId reference
+             * A Google Developers clientId reference
              *
              * @attribute clientId
              * @type string
@@ -82,7 +88,7 @@ Element enabling you to upload files to Google Drive
              * @attribute autoUpload
              * @type boolean
              */
-            autoUpload: true,
+            autoUpload: false,
             ready: function () {
               this.fire('google-drive-upload-status', { status: 'Ready'});
               document.addEventListener('google-signin-success', function (e) {
@@ -92,7 +98,6 @@ Element enabling you to upload files to Google Drive
             },
             selectFiles: function (files) {
                 this.queue = files;
-                this.fire('google-drive-upload-status', { status: 'Files selected'});
 
                 for (var i = 0, f; f = files[i]; i++) {
                     this.uploadList.push(f);
@@ -101,6 +106,9 @@ Element enabling you to upload files to Google Drive
                 if (this.autoUpload) {
                     this.uploadFiles(files);
                 }
+
+                this.fire('google-drive-files-selected', { files: this.uploadList });
+                this.fire('google-drive-upload-status', { status: 'Files selected'});
             },
             manualUpload: function () {
                 this.uploadFiles(this.queue);
