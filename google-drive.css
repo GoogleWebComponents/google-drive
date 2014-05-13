@@ -1,4 +1,8 @@
 ﻿:host {
-  display: block;
+  display: inline-block;
+  position: relative;
 }
 
+:host google-signin, #files, #upload {
+	float: left;
+}
