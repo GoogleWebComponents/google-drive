@@ -4,16 +4,22 @@
 
 
 <!--
-Element enabling you to upload files to Google Drive
+Element enabling you to upload files to Google Drive.
 
-##### Example
+##### Examples
 
-    <google-drive></google-drive>
+Manual upload with an Upload button once files are selected:
+
+    <google-drive clientId="..."></google-drive>
+
+Automatic upload on file select, without Upload button:
+
+    <google-drive autoUpload clientId="..."></google-drive>
 
 @element google-drive
 @blurb Element enabling you to upload files to Google Drive.
 @status alpha
-@url http://addyosmani.github.io/google-drive
+@homepage http://addyosmani.github.io/google-drive
 -->
 <polymer-element name="google-drive" attributes="autoUpload clientId">
 
@@ -23,9 +29,11 @@ Element enabling you to upload files to Google Drive
 
     <google-signin clientId="{{clientId}}" scopes="profile"></google-signin>
 
-    <input tabindex="0" type="file" id="files" class="custom-file-input" name="files[]" multiple on-change="{{handleFilePick}}"/>
+    <span style="display:{{ authenticated ? 'inline-block' : 'none' }}">
+      <input tabindex="0" type="file" id="files" class="custom-file-input" name="files[]" multiple on-change="{{handleFilePick}}"/>
 
-    <button on-click="{{manualUpload}}" id="upload" style="display:{{ autoUpload ? 'none' : 'block' }}">Upload files</button>
+      <button on-click="{{manualUpload}}" id="upload" style="display:{{ autoUpload ? 'none' : 'block' }}">Upload files</button>
+    </span>
   </template>
 
   <script>
@@ -60,7 +68,13 @@ Element enabling you to upload files to Google Drive
              * 
              * @event google-drive-upload-failed
              */
-                                          
+
+            /**
+             * Fired when the upload lists are cleared
+             * 
+             * @event google-drive-upload-cleared
+             */
+                                                      
             /**
              * A Google Developers clientId reference
              *
@@ -89,12 +103,25 @@ Element enabling you to upload files to Google Drive
              * @type boolean
              */
             autoUpload: false,
+            /**
+             * Whether the user has authenticated or not
+             *
+             * @attribute authenticated
+             * @type boolean
+             */
+            authenticated: false,
             ready: function () {
-              this.fire('google-drive-upload-status', { status: 'Ready'});
+              this.fire('google-drive-upload-status', { status: 'Authentication required' });
               document.addEventListener('google-signin-success', function (e) {
                   this.accessToken = e.detail.result.access_token;
+                  this.authenticated = true;
+                  this.fire('google-drive-upload-status', { status: 'Ready' });
               }.bind(this));
 
+              document.addEventListener('google-signed-out', function (e) {
+                  this.authenticated = false;
+                  this.fire('google-drive-upload-status', { status: 'Please sign-in to continue.' });
+              }.bind(this));
             },
             selectFiles: function (files) {
                 this.queue = files;
@@ -147,6 +174,7 @@ Element enabling you to upload files to Google Drive
             clearUploadList: function () {
                 this.uploadedList = [];
                 this.uploadList = [];
+                this.fire('google-drive-upload-cleared', { status: 'Upload lists cleared' });
             }
     });
 
