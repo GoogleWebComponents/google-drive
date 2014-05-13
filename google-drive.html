@@ -86,13 +86,13 @@ Element enabling you to upload files to Google Drive
                 this.fire('google-drive-upload-files', { files: this.uploadList });
 
                 for (var i = 0, f; f = files[i]; i++) {
-                    this.fire('google-drive-upload-status', { status: 'Uploading'});
+                    this.fire('google-drive-upload-status', { status: 'Uploading' });
                     var uploader = new MediaUploader({
                         file: f,
                         token: this.accessToken,
                         onComplete: function (data) {
                             uploadedList.push(JSON.parse(data));
-                            this.fire('google-drive-upload-status', { status: 'Upload successful'});
+                            this.fire('google-drive-upload-status', { status: 'Upload successful' });
                             this.uploadList = [];
                             this.fire('google-drive-uploaded-files', { files: this.uploadedList });
                         }.bind(this)
