@@ -40,13 +40,13 @@ Element enabling you to upload files to Google Drive
             /**
              * Fired when the element attempts to upload files
              * 
-             * @event google-drive-upload-files
+             * @event google-drive-upload-started
              */
 
             /**
              * Fired when file uploads have successfully completed
              * 
-             * @event google-drive-upload-files
+             * @event google-drive-upload-completed
              */
 
             /**
@@ -107,7 +107,7 @@ Element enabling you to upload files to Google Drive
             },
             uploadFiles: function (files) {
                 var uploadedList = this.uploadedList;
-                this.fire('google-drive-upload-files', { files: this.uploadList });
+                this.fire('google-drive-upload-started', { files: this.uploadList });
                 this.fire('google-drive-upload-status', { status: 'Uploading' });
 
                 for (var i = 0, f; f = files[i]; i++) {
@@ -121,7 +121,7 @@ Element enabling you to upload files to Google Drive
                             uploadedList.push(JSON.parse(data));
                             this.fire('google-drive-upload-status', { status: 'Upload successful' });
                             this.uploadList = [];
-                            this.fire('google-drive-uploaded-files', { files: this.uploadedList, data: data });
+                            this.fire('google-drive-upload-completed', { files: this.uploadedList, data: data });
                         }.bind(this)
                     });
                     uploader.upload();

@@ -37,13 +37,13 @@
     </ul>
 
   <script>
-  document.addEventListener('google-drive-upload-files', function(e){
+  document.addEventListener('google-drive-upload-started', function(e){
   	var t = document.querySelector("#queue");
   	t.model = {};
   	t.model.uploadList = e.detail.files;
   });
 
-  document.addEventListener('google-drive-uploaded-files', function(e){
+  document.addEventListener('google-drive-upload-completed', function(e){
   	var t = document.querySelector("#uploaded");
   	t.model = {};
   	t.model.uploadedList = e.detail.files;
