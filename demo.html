@@ -10,7 +10,7 @@
 </head>
 <body unresolved>
 
-  <p>An `google-drive` looks like this:</p>
+  <p>An `&lt;google-drive&gt;` element looks like this:</p>
 
   <google-drive clientId="400542164111-q94vcbin3jp3fb2a0su1nm6gt4qpf86t.apps.googleusercontent.com"></google-drive>
 
@@ -42,6 +42,12 @@
   	t.model = {};
   	t.model.uploadList = e.detail.files;
   });
+
+  document.addEventListener('google-drive-files-selected', function(e){
+  	var t = document.querySelector("#queue");
+  	t.model = {};
+  	t.model.uploadList = e.detail.files;
+  })
 
   document.addEventListener('google-drive-upload-completed', function(e){
   	var t = document.querySelector("#uploaded");
