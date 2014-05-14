@@ -27,7 +27,7 @@ Automatic upload on file select, without Upload button:
     <script src="upload.js"></script>
     <link href="google-drive.css" rel="stylesheet" />
 
-    <google-signin clientId="{{clientId}}" scopes="profile"></google-signin>
+    <google-signin clientId="{{clientId}}" scopes="https://www.googleapis.com/auth/drive"></google-signin>
 
     <span style="display:{{ authenticated ? 'inline-block' : 'none' }}">
       <input tabindex="0" type="file" id="files" class="custom-file-input" name="files[]" multiple on-change="{{handleFilePick}}"/>
