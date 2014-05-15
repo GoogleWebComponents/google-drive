@@ -4,6 +4,7 @@
   "dependencies": {
     "polymer": "Polymer/polymer#master",
     "google-signin": "GoogleWebComponents/google-signin#~0.0.6",
-    "google-apis": "PolymerLabs/google-apis"
+    "google-apis": "PolymerLabs/google-apis",
+    "cors-upload-sample": "googledrive/cors-upload-sample#master"
   }
 }
