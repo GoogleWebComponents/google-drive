@@ -7,35 +7,35 @@
   <script src="../platform/platform.js"></script>
   <link rel="import" href="google-drive.html">
   <style>
-  	body {
-  		font-family: Arial, sans-serif;
-  	}
-	h1 {
-		color: #E91E63;
-		font-size: 52px;
-	}
+    body {
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      color: #E91E63;
+      font-size: 52px;
+    }
 
-	table {
-		width: 80%;
-		margin:20px 0 20px 0;
-		border-collapse: collapse;
-		border: 1px solid #4285f4;
-	}
+    table {
+      width: 50%;
+      margin:20px 0 20px 0;
+      border-collapse: collapse;
+      border: 1px solid #4285f4;
+    }
 
-	td {
-		border: 1px solid #4285f4;
-		line-height: 40px;
-		padding-left: 24px;
-		padding-right: 24px;
-	}
+    td {
+      border: 1px solid #4285f4;
+      line-height: 40px;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
 
-	th {
-		height: 60px;
-		padding-left: 24px;
-		background: #4285f4 !important;
-		color: #fff !important;
-		text-align: left;
-	}
+    th {
+      height: 60px;
+      padding-left: 24px;
+      background: #4285f4 !important;
+      color: #fff !important;
+      text-align: left;
+    }
   </style>
 
 </head>
@@ -47,26 +47,26 @@
 
   <p><h1>Uploads</h1></p>
 
-	<template id="status" bind="{{status}}">
-		 <strong>Status</strong>: {{message}}
-	</template>
+  <template id="status" bind="{{status}}">
+     <strong>Status</strong>: {{message}}
+  </template>
 
-	<table class="google-drive-table">
-		<tr>
-		  <th>Upload queue</th>
-		</tr>
-		<template id="queue" repeat="{{uploadList}}">
-			<tr>
-			  <td>{{name}}</td>
-			</tr>
-		</template>
-	</table>
+  <table class="google-drive-table">
+    <tr>
+      <th>Upload queue</th>
+    </tr>
+    <template id="queue" repeat="{{uploadList}}">
+      <tr>
+        <td>{{name}}</td>
+      </tr>
+    </template>
+  </table>
 
     <table>
-	<table class="google-drive-table">
-		<tr>
-		  <th>Successful uploads</th>
-		</tr>
+  <table class="google-drive-table">
+    <tr>
+      <th>Successful uploads</th>
+    </tr>
         <template id="uploaded" repeat="{{uploadedList}}">
             <tr>
             <td><img src="{{iconLink}}"/>&nbsp;<strong>{{title}}</strong></td> 
@@ -78,29 +78,24 @@
     </table>
 
   <script>
-  document.addEventListener('google-drive-upload-started', function(e){
-  	var t = document.querySelector("#queue");
-  	t.model = {};
-  	t.model.uploadList = e.detail.files;
+  document.addEventListener('google-drive-upload-started', function(e) {
+    var t = document.querySelector("#queue");
+    t.model = {uploadList: e.detail.files};
   });
 
-  document.addEventListener('google-drive-files-selected', function(e){
-  	var t = document.querySelector("#queue");
-  	t.model = {};
-  	t.model.uploadList = e.detail.files;
+  document.addEventListener('google-drive-files-selected', function(e) {
+    var t = document.querySelector("#queue");
+    t.model = {uploadList: e.detail.files};
   })
 
-  document.addEventListener('google-drive-upload-completed', function(e){
-  	var t = document.querySelector("#uploaded");
-  	t.model = {};
-  	t.model.uploadedList = e.detail.files;
-  	console.log(e.detail.files);
+  document.addEventListener('google-drive-upload-completed', function(e) {
+    var t = document.querySelector("#uploaded");
+    t.model = {uploadedList: e.detail.files};
   });
 
-  document.addEventListener('google-drive-upload-status', function(e){
-  	var t = document.querySelector("#status");
-  	t.model = {};
-  	t.model.status = { message: e.detail.status };
+  document.addEventListener('google-drive-upload-status', function(e) {
+    var t = document.querySelector("#status");
+    t.model.status = { status: { message: e.detail.status }};
   });
   </script>
 

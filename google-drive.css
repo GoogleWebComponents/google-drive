@@ -4,5 +4,5 @@
 }
 
 :host google-signin, #files, #upload {
-	float: left;
+  float: left;
 }

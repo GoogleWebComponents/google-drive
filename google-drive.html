@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../google-signin/google-signin.html">
+<link rel="import" href="google-drive-upload.html">
 
 <!--
 Element enabling you to upload files to Google Drive.
@@ -17,15 +18,14 @@ Automatic upload on file select, without Upload button:
 @element google-drive
 @blurb Element enabling you to upload files to Google Drive.
 @status alpha
-@homepage http://addyosmani.github.io/google-drive
+@homepage http://googlewebcomponents.github.io/google-drive
 -->
 <polymer-element name="google-drive" attributes="autoUpload clientId">
 
   <template>
-    <script src="../cors-upload-sample/upload.js"></script>
     <link href="google-drive.css" rel="stylesheet" />
 
-    <google-signin clientId="{{clientId}}" scopes="https://www.googleapis.com/auth/drive"></google-signin>
+    <google-signin clientId="{{clientId}}" scopes="https://www.googleapis.com/auth/drive" on-google-signin-success="{{signedIn}}" on-google-signed-out="{{signedOut}}"></google-signin>
 
     <span style="display:{{ authenticated ? 'inline-block' : 'none' }}">
       <input tabindex="0" type="file" id="files" class="custom-file-input" name="files[]" multiple on-change="{{handleFilePick}}"/>
@@ -78,20 +78,23 @@ Automatic upload on file select, without Upload button:
              *
              * @attribute clientId
              * @type string
+             * @required
              */
             clientId: '',
             /**
              * The queue of files being uploaded
              *
-             * @attribute uploadList
+             * @property uploadList
              * @type array
+             * @default []
              */
             uploadList: [],
             /**
              * The queue of files that have been uploaded
              *
-             * @attribute uploadedList
+             * @property uploadedList
              * @type array
+             * @default []
              */
             uploadedList: [],
             /**
@@ -104,22 +107,21 @@ Automatic upload on file select, without Upload button:
             /**
              * Whether the user has authenticated or not
              *
-             * @attribute authenticated
+             * @property authenticated
              * @type boolean
              */
             authenticated: false,
             ready: function () {
               this.fire('google-drive-upload-status', { status: 'Authentication required' });
-              document.addEventListener('google-signin-success', function (e) {
-                  this.accessToken = e.detail.result.access_token;
-                  this.authenticated = true;
-                  this.fire('google-drive-upload-status', { status: 'Ready' });
-              }.bind(this));
-
-              document.addEventListener('google-signed-out', function (e) {
-                  this.authenticated = false;
-                  this.fire('google-drive-upload-status', { status: 'Please sign-in to continue.' });
-              }.bind(this));
+            },
+            signedIn: function(e) {
+                this.accessToken = e.detail.result.access_token;
+                this.authenticated = true;
+                this.fire('google-drive-upload-status', { status: 'Ready' });
+            },
+            signedOut: function(e) {
+                this.authenticated = false;
+                this.fire('google-drive-upload-status', { status: 'Please sign-in to continue.' });
             },
             selectFiles: function (files) {
                 this.queue = files;
@@ -160,9 +162,6 @@ Automatic upload on file select, without Upload button:
                     uploader.upload();
                 }
 
-            },
-            tapSelect: function (evt) {
-                this.$.files.click();
             },
             handleFilePick: function (evt) {
                 evt.stopPropagation();
