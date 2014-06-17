@@ -48,7 +48,7 @@
 
   <p><h1>Uploads</h1></p>
 
-  <template id="status" bind="{{status}}">
+  <template id="status" is="auto-binding">
      <strong>Status</strong>: {{message}}
   </template>
 
@@ -56,7 +56,7 @@
     <tr>
       <th>Upload queue</th>
     </tr>
-    <template id="queue" repeat="{{uploadList}}">
+    <template id="queue" is="auto-binding" repeat="{{uploadList}}">
       <tr>
         <td>{{name}}</td>
       </tr>
@@ -68,7 +68,7 @@
     <tr>
       <th>Successful uploads</th>
     </tr>
-        <template id="uploaded" repeat="{{uploadedList}}">
+        <template id="uploaded" is="auto-binding" repeat="{{uploadedList}}">
             <tr>
             <td><img src="{{iconLink}}"/>&nbsp;<strong>{{title}}</strong></td> 
             <td><a href="{{selfLink}}">Drive Link</a></td> 
@@ -81,22 +81,22 @@
   <script>
   document.addEventListener('google-drive-upload-started', function(e) {
     var t = document.querySelector("#queue");
-    t.model = {uploadList: e.detail.files};
+    t.uploadList = e.detail.files;
   });
 
   document.addEventListener('google-drive-files-selected', function(e) {
     var t = document.querySelector("#queue");
-    t.model = {uploadList: e.detail.files};
+    t.uploadList = e.detail.files;
   })
 
   document.addEventListener('google-drive-upload-completed', function(e) {
     var t = document.querySelector("#uploaded");
-    t.model = {uploadedList: e.detail.files};
+    t.uploadedList = e.detail.files;
   });
 
   document.addEventListener('google-drive-upload-status', function(e) {
     var t = document.querySelector("#status");
-    t.model = { status: { message: e.detail.status }};
+    t.message = e.detail.status;
   });
   </script>
 <script>
