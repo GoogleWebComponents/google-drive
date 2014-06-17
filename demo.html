@@ -96,7 +96,7 @@
 
   document.addEventListener('google-drive-upload-status', function(e) {
     var t = document.querySelector("#status");
-    t.model.status = { status: { message: e.detail.status }};
+    t.model = { status: { message: e.detail.status }};
   });
   </script>
 <script>
