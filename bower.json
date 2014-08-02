@@ -1,5 +1,30 @@
 {
   "name": "google-drive",
+  "version": "0.0.0",
+  "homepage": "http://googlewebcomponents.github.io/google-drive",
+  "description": "Google Drive Polymer element",
+  "main": "google-drive.html",
+  "authors": [
+    "Addy Osmani"
+  ],
+  "license": "Apache2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "../"
+  ],
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "drive",
+    "upload",
+    "file",
+    "google"
+  ],
   "dependencies": {
     "polymer": "Polymer/polymer#master",
     "google-signin": "GoogleWebComponents/google-signin#~0.0.7",
