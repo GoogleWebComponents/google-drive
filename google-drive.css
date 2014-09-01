@@ -6,3 +6,7 @@
 :host google-signin, #files, #upload {
   float: left;
 }
+
+:host google-signin {
+  margin-right: 20px;
+}
