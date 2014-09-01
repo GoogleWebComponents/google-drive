@@ -1,6 +1,6 @@
 {
   "name": "google-drive",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "homepage": "http://googlewebcomponents.github.io/google-drive",
   "description": "Google Drive Polymer element",
   "main": "google-drive.html",
