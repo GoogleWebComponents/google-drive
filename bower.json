@@ -1,0 +1,7 @@
+{
+  "name": "google-drive#gh-pages",
+  "private": true,
+  "dependencies": {
+    "google-drive": "GoogleWebComponents/google-drive#master"
+  }
+}

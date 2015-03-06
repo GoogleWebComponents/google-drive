@@ -1,0 +1,180 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../google-signin/google-signin.html">
+<link rel="import" href="google-drive-upload.html">
+
+<!--
+Element enabling you to upload files to Google Drive.
+
+##### Examples
+
+Manual upload with an Upload button once files are selected:
+
+    <google-drive clientId="..."></google-drive>
+
+Automatic upload on file select, without Upload button:
+
+    <google-drive autoUpload clientId="..."></google-drive>
+
+@element google-drive
+@blurb Element enabling you to upload files to Google Drive.
+@status alpha
+@homepage http://googlewebcomponents.github.io/google-drive
+-->
+<polymer-element name="google-drive" attributes="autoUpload clientId">
+
+  <template>
+    <link href="google-drive.css" rel="stylesheet" />
+
+    <google-signin clientId="{{clientId}}" scopes="https://www.googleapis.com/auth/drive" on-google-signin-success="{{signedIn}}" on-google-signed-out="{{signedOut}}"></google-signin>
+
+    <span style="display:{{ authenticated ? 'inline-block' : 'none' }}">
+      <input tabindex="0" type="file" id="files" class="custom-file-input" name="files[]" multiple on-change="{{handleFilePick}}"/>
+
+      <button on-click="{{manualUpload}}" id="upload" style="display:{{ autoUpload ? 'none' : 'block' }}">Upload files</button>
+    </span>
+  </template>
+
+  <script>
+
+    Polymer({
+            /**
+             * Fired when the upload status changes
+             * 
+             * @event google-drive-upload-status
+             */
+
+            /**
+             * Fired when files have been selected
+             * 
+             * @event google-drive-files-selected
+             */
+            
+            /**
+             * Fired when the element attempts to upload files
+             * 
+             * @event google-drive-upload-started
+             */
+
+            /**
+             * Fired when file uploads have successfully completed
+             * 
+             * @event google-drive-upload-completed
+             */
+
+            /**
+             * Fired when file uploads have failed
+             * 
+             * @event google-drive-upload-failed
+             */
+
+            /**
+             * Fired when the upload lists are cleared
+             * 
+             * @event google-drive-upload-cleared
+             */
+                                                      
+            /**
+             * A Google Developers clientId reference
+             *
+             * @attribute clientId
+             * @type string
+             * @required
+             */
+            clientId: '',
+            /**
+             * The queue of files being uploaded
+             *
+             * @property uploadList
+             * @type array
+             * @default []
+             */
+            uploadList: [],
+            /**
+             * The queue of files that have been uploaded
+             *
+             * @property uploadedList
+             * @type array
+             * @default []
+             */
+            uploadedList: [],
+            /**
+             * Whether files should be automatically uploaded
+             *
+             * @attribute autoUpload
+             * @type boolean
+             */
+            autoUpload: false,
+            /**
+             * Whether the user has authenticated or not
+             *
+             * @property authenticated
+             * @type boolean
+             */
+            authenticated: false,
+            ready: function () {
+              this.fire('google-drive-upload-status', { status: 'Authentication required' });
+            },
+            signedIn: function(e) {
+                this.accessToken = e.detail.result.access_token;
+                this.authenticated = true;
+                this.fire('google-drive-upload-status', { status: 'Ready' });
+            },
+            signedOut: function(e) {
+                this.authenticated = false;
+                this.fire('google-drive-upload-status', { status: 'Please sign-in to continue.' });
+            },
+            selectFiles: function (files) {
+                this.queue = files;
+
+                for (var i = 0, f; f = files[i]; i++) {
+                    this.uploadList.push(f);
+                }
+
+                if (this.autoUpload) {
+                    this.uploadFiles(files);
+                }
+
+                this.fire('google-drive-files-selected', { files: this.uploadList });
+                this.fire('google-drive-upload-status', { status: 'Files selected'});
+            },
+            manualUpload: function () {
+                this.uploadFiles(this.queue);
+            },
+            uploadFiles: function (files) {
+                var uploadedList = this.uploadedList;
+                this.fire('google-drive-upload-started', { files: this.uploadList });
+                this.fire('google-drive-upload-status', { status: 'Uploading' });
+
+                for (var i = 0, f; f = files[i]; i++) {
+                    var uploader = new MediaUploader({
+                        file: f,
+                        token: this.accessToken,
+                        onError: function (data) {
+                          this.fire('google-drive-upload-failed', { data: data })
+                        }.bind(this),
+                        onComplete: function (data) {
+                            uploadedList.push(JSON.parse(data));
+                            this.fire('google-drive-upload-status', { status: 'Upload successful' });
+                            this.uploadList = [];
+                            this.fire('google-drive-upload-completed', { files: this.uploadedList, data: data });
+                        }.bind(this)
+                    });
+                    uploader.upload();
+                }
+
+            },
+            handleFilePick: function (evt) {
+                evt.stopPropagation();
+                evt.preventDefault();
+                this.selectFiles(evt.target.files);
+            },
+            clearUploadList: function () {
+                this.uploadedList = [];
+                this.uploadList = [];
+                this.fire('google-drive-upload-cleared', { status: 'Upload lists cleared' });
+            }
+    });
+
+  </script>
+
+</polymer-element>

@@ -1,0 +1,104 @@
+<!doctype html>
+<!-- Copyright (c) 2014 Google Inc. All rights reserved. -->
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <title>google-signin Demo</title>
+
+    <script src="../webcomponentsjs/webcomponents.min.js"></script>
+    <link rel="import" href="google-signin.html">
+
+    <!-- Demo only styles -->
+    <style>
+      * { font-family: 'RobotoDraft', 'Roboto', sans-serif; line-height:1.2; vertical-align:middle; }
+
+      body {
+        background: rgba(204, 204, 204, 0.31);
+      }
+
+      .card {
+        min-width: 300px;
+        max-width: 400px;
+        padding:1.5rem;
+        box-shadow:0 1px 2px #aaa;
+        background:white;
+        margin:1rem 1rem 1rem;
+        border-radius:3px;
+        user-select:none;
+        transform-origin:top left;
+        position:relative;
+        z-index:2;
+        clear: both;
+      }
+
+      .card:nth-child(even){
+       transform-origin:top right;
+      }
+
+      .map {
+        background: whitesmoke;
+        margin: .5rem -1.5rem 0 -1.5rem;
+        padding: 0.5rem;
+      }
+
+      h1 {
+        font-size:2rem;
+        font-weight:200;
+      }
+
+      h1 strong {
+        font-weight:300;
+        color:#539D00;
+      }
+
+      h2 {
+        font-size:.9rem;
+        line-height:2.5;
+        color:gray;
+        font-weight:400;
+      }
+    </style>
+
+</head>
+
+<body unresolved>
+
+    <p>A `google-signin` element looks like this:</p>
+
+    <h2>Standard button with `profile` scope:</h2>
+    <p><google-signin clientId="1054047045356-j8pgqgls9vdef3rl09hapoicumbte0bo.apps.googleusercontent.com" scopes="profile"></google-signin></p>
+
+    <h2>Wide tall button with `email` scope:</h2>
+    <p><google-signin clientId="1054047045356-j8pgqgls9vdef3rl09hapoicumbte0bo.apps.googleusercontent.com" scopes="email" width="wide" height="tall"></google-signin></p>
+
+    <h2>Short light themed button with `email` and `plus.profile.emails.read` scope:</h2>
+    <p><google-signin clientId="1054047045356-j8pgqgls9vdef3rl09hapoicumbte0bo.apps.googleusercontent.com" scopes="https://www.googleapis.com/auth/plus.profile.emails.read email" theme="light" width="standard" height="short"></google-signin></p>
+
+    <h2>Tall light themed icon only button with `plus.login` scope:</h2>
+    <p><google-signin clientId="1054047045356-j8pgqgls9vdef3rl09hapoicumbte0bo.apps.googleusercontent.com" scopes="https://www.googleapis.com/auth/plus.login" theme="light" width="iconOnly" height="tall"></google-signin></p>
+
+    <!-- Demo the ability to use the google-signin-aware element. -->
+    <polymer-element name="sample-aware">
+      <template>
+        <google-signin-aware
+            scopes="https://www.googleapis.com/auth/calendar.readonly"
+            on-google-signin-aware-success="{{signIn}}"></google-signin-aware>
+
+        <p>Testing <code>google-signin-aware</code>: {{status}}</p>
+      </template>
+
+      <script>
+        Polymer('sample-aware', {
+          status: 'Not granted',
+          signIn: function(response) {
+            this.status = 'Signin granted';
+            console.log('Signin Response', response);
+          }
+        });
+      </script>
+    </polymer-element>
+
+    <sample-aware></sample-aware>
+</body>
+</html>
