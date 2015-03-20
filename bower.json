@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#~0.5.4",
-    "google-signin": "GoogleWebComponents/google-signin#~0.2.1",
+    "google-signin": "GoogleWebComponents/google-signin#~0.3.0",
     "cors-upload-sample": "googledrive/cors-upload-sample#master"
   },
   "resolutions": {

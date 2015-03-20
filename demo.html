@@ -6,6 +6,7 @@
   <title>google-drive Demo</title>
 
   <script src="../webcomponentsjs/webcomponents.js"></script>
+  <link rel="import" href="../google-signin/google-signin.html">
   <link rel="import" href="google-drive.html">
   <style>
     body {
@@ -41,10 +42,16 @@
 
 </head>
 <body unresolved>
+  <p>
+    <google-signin
+      clientId="1054047045356-j8pgqgls9vdef3rl09hapoicumbte0bo.apps.googleusercontent.com"
+      scopes="https://www.googleapis.com/auth/drive">
+    </google-signin>
+  </p>
 
   <p>An `&lt;google-drive&gt;` element looks like this:</p>
 
-  <google-drive clientId="1054047045356-j8pgqgls9vdef3rl09hapoicumbte0bo.apps.googleusercontent.com"></google-drive>
+  <google-drive></google-drive>
 
   <p><h1>Uploads</h1></p>
 
