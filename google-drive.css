@@ -3,10 +3,6 @@
   position: relative;
 }
 
-:host google-signin, #files, #upload {
+#files, #upload {
   float: left;
-}
-
-:host google-signin {
-  margin-right: 20px;
 }
