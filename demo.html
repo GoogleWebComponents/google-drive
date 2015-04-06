@@ -70,19 +70,18 @@
     </template>
   </table>
 
-    <table>
   <table class="google-drive-table">
     <tr>
       <th>Successful uploads</th>
     </tr>
-        <template id="uploaded" is="auto-binding" repeat="{{uploadedList}}">
-            <tr>
-            <td><img src="{{iconLink}}"/>&nbsp;<strong>{{title}}</strong></td>
-            <td><a href="{{webContentLink}}">Web Link</a></td>
-            <td>{{mimeType}}</td>
-            </tr>
-        </template>
-    </table>
+    <template id="uploaded" is="auto-binding" repeat="{{uploadedList}}">
+      <tr>
+        <td><img src="{{iconLink}}"/>&nbsp;<strong>{{title}}</strong></td>
+        <td><a href="{{webContentLink}}">Web Link</a></td>
+        <td>{{mimeType}}</td>
+      </tr>
+    </template>
+  </table>
 
   <script>
   document.addEventListener('google-drive-upload-started', function(e) {
