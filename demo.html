@@ -5,7 +5,7 @@
 
   <title>google-drive Demo</title>
 
-  <script src="../webcomponentsjs/webcomponents.js"></script>
+  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../google-signin/google-signin.html">
   <link rel="import" href="google-drive.html">
   <style>
@@ -41,10 +41,10 @@
   </style>
 
 </head>
-<body unresolved>
+<body>
   <p>
     <google-signin
-      clientId="1054047045356-j8pgqgls9vdef3rl09hapoicumbte0bo.apps.googleusercontent.com"
+      client-id="1054047045356-j8pgqgls9vdef3rl09hapoicumbte0bo.apps.googleusercontent.com"
       scopes="https://www.googleapis.com/auth/drive">
     </google-signin>
   </p>
@@ -55,18 +55,20 @@
 
   <p><h1>Uploads</h1></p>
 
-  <template id="status" is="auto-binding">
-     <strong>Status</strong>: {{message}}
+  <template id="status" is="x-autobind">
+     <strong>Status</strong>:<span>{{message}}</span>
   </template>
 
   <table class="google-drive-table">
     <tr>
       <th>Upload queue</th>
     </tr>
-    <template id="queue" is="auto-binding" repeat="{{uploadList}}">
-      <tr>
-        <td>{{name}}</td>
-      </tr>
+    <template id="queue" is="x-autobind">
+      <template is="x-repeat" items="{{uploadList}}">
+        <tr>
+          <td>{{item.name}}</td>
+        </tr>
+      </template>
     </template>
   </table>
 
@@ -74,35 +76,37 @@
     <tr>
       <th>Successful uploads</th>
     </tr>
-    <template id="uploaded" is="auto-binding" repeat="{{uploadedList}}">
-      <tr>
-        <td><img src="{{iconLink}}"/>&nbsp;<strong>{{title}}</strong></td>
-        <td><a href="{{webContentLink}}">Web Link</a></td>
-        <td>{{mimeType}}</td>
-      </tr>
+    <template id="uploaded" is="x-autobind">
+      <template is="x-repeat" items="{{uploadedList}}">
+        <tr>
+          <td><img src="{{item.iconLink}}"/>&nbsp;<strong>{{item.title}}</strong></td>
+          <td><a href="{{item.webContentLink}}">Web Link</a></td>
+          <td>{{item.mimeType}}</td>
+        </tr>
+      </template>
     </template>
   </table>
 
   <script>
-  document.addEventListener('google-drive-upload-started', function(e) {
-    var t = document.querySelector("#queue");
-    t.uploadList = e.detail.files;
-  });
+    document.addEventListener('google-drive-upload-started', function(e) {
+      var t = document.querySelector("#queue");
+      t.uploadList = e.detail.files;
+    });
 
-  document.addEventListener('google-drive-files-selected', function(e) {
-    var t = document.querySelector("#queue");
-    t.uploadList = e.detail.files;
-  })
+    document.addEventListener('google-drive-files-selected', function(e) {
+      var t = document.querySelector("#queue");
+      t.uploadList = e.detail.files;
+    })
 
-  document.addEventListener('google-drive-upload-completed', function(e) {
-    var t = document.querySelector("#uploaded");
-    t.uploadedList = e.detail.files;
-  });
+    document.addEventListener('google-drive-upload-completed', function(e) {
+      var t = document.querySelector("#uploaded");
+      t.uploadedList = e.detail.files;
+    });
 
-  document.addEventListener('google-drive-upload-status', function(e) {
-    var t = document.querySelector("#status");
-    t.message = e.detail.status;
-  });
+    document.addEventListener('google-drive-upload-status', function(e) {
+      var t = document.querySelector("#status");
+      t.message = e.detail.status;
+    });
   </script>
 </body>
 </html>
