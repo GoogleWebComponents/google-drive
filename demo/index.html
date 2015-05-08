@@ -5,9 +5,9 @@
 
   <title>google-drive Demo</title>
 
-  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../google-signin/google-signin.html">
-  <link rel="import" href="google-drive.html">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../google-signin/google-signin.html">
+  <link rel="import" href="../google-drive.html">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -55,7 +55,7 @@
 
   <p><h1>Uploads</h1></p>
 
-  <template id="status" is="x-autobind">
+  <template id="status" is="dom-bind">
      <strong>Status</strong>:<span>{{message}}</span>
   </template>
 
@@ -63,8 +63,8 @@
     <tr>
       <th>Upload queue</th>
     </tr>
-    <template id="queue" is="x-autobind">
-      <template is="x-repeat" items="{{uploadList}}">
+    <template id="queue" is="dom-bind">
+      <template is="dom-repeat" items="{{uploadList}}">
         <tr>
           <td>{{item.name}}</td>
         </tr>
@@ -76,8 +76,8 @@
     <tr>
       <th>Successful uploads</th>
     </tr>
-    <template id="uploaded" is="x-autobind">
-      <template is="x-repeat" items="{{uploadedList}}">
+    <template id="uploaded" is="dom-bind">
+      <template is="dom-repeat" items="{{uploadedList}}">
         <tr>
           <td><img src="{{item.iconLink}}"/>&nbsp;<strong>{{item.title}}</strong></td>
           <td><a href="{{item.webContentLink}}">Web Link</a></td>
@@ -90,17 +90,17 @@
   <script>
     document.addEventListener('google-drive-upload-started', function(e) {
       var t = document.querySelector("#queue");
-      t.uploadList = e.detail.files;
+      t.uploadList = e.detail.files.slice();
     });
 
     document.addEventListener('google-drive-files-selected', function(e) {
       var t = document.querySelector("#queue");
-      t.uploadList = e.detail.files;
+      t.uploadList = e.detail.files.slice();
     })
 
     document.addEventListener('google-drive-upload-completed', function(e) {
       var t = document.querySelector("#uploaded");
-      t.uploadedList = e.detail.files;
+      t.uploadedList = e.detail.files.slice();
     });
 
     document.addEventListener('google-drive-upload-status', function(e) {
