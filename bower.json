@@ -23,11 +23,11 @@
     "google"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^0.9.0",
+    "polymer": "Polymer/polymer#^1.0.0",
     "google-signin": "GoogleWebComponents/google-signin#^1.0.0",
     "cors-upload-sample": "googledrive/cors-upload-sample#master"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^0.9.4"
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0"
   }
 }
