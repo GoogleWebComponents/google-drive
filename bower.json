@@ -28,6 +28,6 @@
     "cors-upload-sample": "googledrive/cors-upload-sample#master"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0"
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.2"
   }
 }
