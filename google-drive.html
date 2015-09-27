@@ -128,7 +128,7 @@ Automatic upload on file select, without Upload button:
     _selectFiles: function (files) {
 
       for (var i = 0, f; f = files[i]; i++) {
-          this._uploadList.push(f);
+          this.push('_uploadList', f);
       }
 
       if (this.autoUpload) {
@@ -158,7 +158,7 @@ Automatic upload on file select, without Upload button:
           onComplete: function (data) {
             this._uploadedList.push(JSON.parse(data));
             this.fire('google-drive-upload-status', { status: 'Upload successful' });
-            this._uploadList = [];
+            this.splice('_uploadList', 0, this._uploadList.length);
             this.fire('google-drive-upload-completed', { files: this._uploadedList, data: data });
           }.bind(this)
         });
@@ -174,8 +174,8 @@ Automatic upload on file select, without Upload button:
     },
 
     _clearUploadList: function () {
-      this._uploadedList = [];
-      this._uploadList = [];
+      this.splice('_uploadedList', 0, this._uploadedList.length);
+      this.splice('_uploadList', 0, this._uploadList.length);
       this.fire('google-drive-upload-cleared', { status: 'Upload lists cleared' });
     }
   });
