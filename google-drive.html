@@ -21,6 +21,7 @@ Automatic upload on file select, without Upload button:
   <link rel="import" type="css" href="google-drive.css">
   <template>
     <google-signin-aware
+      id="signin"
       client-id="{{clientId}}"
       scopes="https://www.googleapis.com/auth/drive"
       on-google-signin-aware-success="_signedIn"
@@ -115,6 +116,10 @@ Automatic upload on file select, without Upload button:
       this.fire('google-drive-upload-status', { status: 'Authentication required' });
     },
 
+    signIn: function() {
+      this.$.signin.signIn();
+    }
+
     _computeSpanStyle: function(authenticated) {
       return "display:" + (authenticated ? 'inline-block' : 'none');
     },
@@ -168,7 +173,7 @@ Automatic upload on file select, without Upload button:
             this._uploadedList.push(JSON.parse(data));
             this.fire('google-drive-upload-status', { status: 'Upload successful' });
             this._uploadList = [];
-            this.fire('google-drive-upload-completed', { files: this._uploadedList, data: data });
+            this.fire('', { files: this._uploadedList, data: data });
           }.bind(this)
         });
         uploader.upload();
