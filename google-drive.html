@@ -21,6 +21,7 @@ Automatic upload on file select, without Upload button:
   <link rel="import" type="css" href="google-drive.css">
   <template>
     <google-signin-aware
+      client-id="{{clientId}}"
       scopes="https://www.googleapis.com/auth/drive"
       on-google-signin-aware-success="_signedIn"
       on-google-signin-aware-signed-out="_signedOut">
@@ -99,7 +100,15 @@ Automatic upload on file select, without Upload button:
       autoUpload: {
         type: Boolean,
         value: false
-      }
+      },
+
+      /**
+       * a Google Developers clientId reference
+       */
+      clientId: {
+        type: String,
+        value: ''
+      },
     },
 
     ready: function () {
